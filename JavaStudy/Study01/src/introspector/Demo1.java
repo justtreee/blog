@@ -1,10 +1,8 @@
 package introspector;
 
-import com.sun.webkit.InspectorClient;
 import org.junit.Test;
 
 import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
