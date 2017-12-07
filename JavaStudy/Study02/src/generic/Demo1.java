@@ -38,7 +38,7 @@ public class Demo1 {
 
     @Test
     public void test2(){
-        Map<Integer, String> map = new LinkedHashMap<Integer, String>();
+        Map<Integer, String> map = new LinkedHashMap<Integer, String>();//必须为应用类型(Interger)，不能是基本类型(int)
         //如果上行使用hashmap，并不是按照顺序存储的
         // 那么最终输出的键值对也不是按照123顺序的
         //使用linked
@@ -65,4 +65,9 @@ public class Demo1 {
             System.out.println(key+": "+value);
         }
     }
+    // 泛型是提供给javac编译器使用的，用于限定集合的输入类型
+    // 让编译器在源代码上挡住向集合中插入的非法数据。
+    // 但编译器编译带有泛型的java程序之后，生成的class文件中将不再带有泛型信息
+    // 以此使程序运行效率不受影响，这个过程称之为“擦除”
+
 }
