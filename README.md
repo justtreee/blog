@@ -1660,13 +1660,15 @@ InnoDB 的趋势会是一个非常复杂的存储引擎，对于一些小的应�
 mongodb不支持事务操作；mongodb占用空间过大；无法进行关联表查询，不适用于关系多的数据；  
 - **优点**：更能保证用户的访问速度；文档结构的存储方式，能够更便捷的获取数据；内置GridFS，支持大容量的存储
 
-### 数据一致性问题（CAP/BASE）(TODO)
+### 数据一致性问题（CAP/BASE）
 CAP，BASE 和最终一致性是 NoSQL 数据库存在的三大基石。而五分钟法则是内存数据存储的理论依据。这个是一切的源头。
-- C: Consistency 一致性
-- A: Availability 可用性(指的是快速获取数据)
-- P: Tolerance of network Partition 分区容忍性(分布式)
+- C: Consistency 一致性，同样数据在分布式系统中所有地方都是被复制成相同。
+- A: Availability 可用性(指的是快速获取数据)所有在分布式系统活跃的节点都能够处理操作且能响应查询。
+- P: Tolerance of network Partition 分区容忍性(分布式)在两个复制系统之间，如果发生了计划之外的网络连接问题，对于这种情况，有一套容错性设计来保证。
 > CA：传统关系数据库  
 > AP：key-value数据库
+
+[ACID和CAP的详尽比较](https://www.jdon.com/artichect/acid-cap.html)
 ---------------
 - Basically Available--基本可用
 - Soft-state --软状态/柔性 事务
@@ -2278,6 +2280,75 @@ public int get(int key){
 - [动手实现一个 LRU cache的三个思路](https://crossoverjie.top/2018/04/07/algorithm/LRU-cache/)  
 - [如何设计实现一个LRU Cache](https://github.com/Yikun/yikun.github.com/issues/9)
 - [LinkedHashMap 的实现原理](http://wiki.jikexueyuan.com/project/java-collection/linkedhashmap.html)
+#### 4. 基于HashMap和双向链表的实现LRU Cache
+![1](https://cloud.githubusercontent.com/assets/1736354/6984935/92033a96-da60-11e4-8754-66135bb0d233.png)
+- [如何设计实现一个LRU Cache？](https://yikun.github.io/2015/04/03/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AALRU-Cache%EF%BC%9F/)
+```java
+public class LRUCache {
+    class Node {
+        Node pre;
+        Node next;
+        Integer key;
+        Integer val;
+        Node(Integer k, Integer v) {
+            key = k;
+            val = v;
+        }
+    }
+    Map<Integer, Node> map = new HashMap<Integer, Node>();
+    // The head (eldest) of the doubly linked list.
+    Node head;
+    // The tail (youngest) of the doubly linked list.
+    Node tail;
+    int cap;
+    public LRUCache(int capacity) {
+        cap = capacity;
+        head = new Node(null, null);
+        tail = new Node(null, null);
+        head.next = tail;
+        tail.pre = head;
+    }
+    public int get(int key) {
+        Node n = map.get(key);
+        if(n!=null) {
+            n.pre.next = n.next;
+            n.next.pre = n.pre;
+            appendTail(n);
+            return n.val;
+        }
+        return -1;
+    }
+    public void set(int key, int value) {
+        Node n = map.get(key);
+        // existed
+        if(n!=null) {
+            n.val = value;
+            map.put(key, n);
+            n.pre.next = n.next;
+            n.next.pre = n.pre;
+            appendTail(n);
+            return;
+        }
+        // else {
+        if(map.size() == cap) {
+            Node tmp = head.next;
+            head.next = head.next.next;
+            head.next.pre = head;
+            map.remove(tmp.key);
+        }
+        n = new Node(key, value);
+        // youngest node append taill
+        appendTail(n);
+        map.put(key, n);
+    }
+    private void appendTail(Node n) {
+        n.next = tail;
+        n.pre = tail.pre;
+        tail.pre.next = n;
+        tail.pre = n;
+    }
+}
+```
 
 ### Set --> HashSet / TreeSet(TODO)
 [Java 集合类实现原理](https://jianshu.com/p/0b2ad1952506)
