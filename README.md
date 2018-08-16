@@ -2514,11 +2514,74 @@ class MyThread implements Runnable {
 
 [java的两种同步方式， Synchronized与ReentrantLock的区别](https://blog.csdn.net/chenchaofuck1/article/details/51045134)
 [Synchronized与Lock锁的区别](http://hanhailong.com/2016/12/10/Synchronized%E4%B8%8ELock%E9%94%81%E7%9A%84%E5%8C%BA%E5%88%AB/)
+### AQS
+#### 1. 什么是AQS
+AQS：AbstractQueuedSynchronizer，即队列同步器。它是构建锁或者其他同步组件的基础框架（如ReentrantLock、ReentrantReadWriteLock、Semaphore等），JUC并发包的作者（Doug Lea）期望它能够成为实现大部分同步需求的基础。它是JUC并发包中的核心基础组件。
+
+如上所述，AQS管理一个关于状态信息的单一整数，该整数可以表现任何状态。比如， `Semaphore` 用它来表现剩余的许可数，`ReentrantLock` 用它来表现拥有它的线程已经请求了多少次锁；`FutureTask` 用它来表现任务的状态(尚未开始、运行、完成和取消)
+
+AQS通过内置的FIFO同步队列来完成资源获取线程的排队工作，如果当前线程获取同步状态失败（锁）时，AQS则会将当前线程以及等待状态等信息构造成一个节点（Node）并将其加入同步队列，同时会阻塞当前线程，当同步状态释放时，则会把节点中的线程唤醒，使其再次尝试获取同步状态。
+
+使用AQS来实现一个同步器需要覆盖实现如下几个方法，并且使用`getState`、`setState`、`compareAndSetState`这几个方法来设置获取状态 
+1. `boolean tryAcquire(int arg)` 
+2. `boolean tryRelease(int arg)` 
+3. `int tryAcquireShared(int arg)` 
+4. `boolean tryReleaseShared(int arg)` 
+5. `boolean isHeldExclusively()`
+
+#### 2. AQS在各同步器内的Sync与State实现
+**2.1 什么是state机制：**
+提供 volatile 变量 state;  用于同步线程之间的共享状态。通过 CAS 和 volatile 保证其原子性和可见性。对应源码里的定义：
+```java
+//同步状态  
+private volatile int state;  
+//cas  
+protected final boolean compareAndSetState(int expect, int update) {  
+    // See below for intrinsics setup to support this  
+    return unsafe.compareAndSwapInt(this, stateOffset, expect, update);  
+}  
+```
+
+**2.2 不同实现类的Sync与State**
+
+基于AQS构建的Synchronizer包括ReentrantLock,Semaphore,CountDownLatch, ReetrantRead WriteLock,FutureTask等，这些Synchronizer实际上最基本的东西就是原子状态的获取和释放，只是条件不一样而已。
+
+**ReentrantLock**
+
+需要记录当前线程获取原子状态的次数，如果次数为零，那么就说明这个线程放弃了锁（也有可能其他线程占据着锁从而需要等待），如果次数大于1，也就是获得了重进入的效果，而其他线程只能被park住，直到这个线程重进入锁次数变成0而释放原子状态。以下为ReetranLock的FairSync的tryAcquire实现代码解析。
+
+**Semaphore**
+
+则是要记录当前还有多少次许可可以使用，到0，就需要等待，也就实现并发量的控制，Semaphore一开始设置许可数为1，实际上就是一把互斥锁。以下为Semaphore的FairSync实现
+
+**CountDownLatch**
+
+闭锁则要保持其状态，在这个状态到达终止态之前，所有线程都会被park住，闭锁可以设定初始值，这个值的含义就是这个闭锁需要被countDown()几次，因为每次CountDown是sync.releaseShared(1),而一开始初始值为10的话，那么这个闭锁需要被countDown()十次，才能够将这个初始值减到0，从而释放原子状态，让等待的所有线程通过。
+
+> CountDownLatch使用例子
+
+> 模拟了一个应用程序启动类，它开始时启动了n个线程类，这些线程将检查外部系统并通知闭锁，并且启动类一直在闭锁上等待着。一旦验证和检查了所有外部服务，那么启动类恢复执行。
+**FutureTask**
+
+需要记录任务的执行状态，当调用其实例的get方法时,内部类Sync会去调用AQS的acquireSharedInterruptibly()方法，而这个方法会反向调用Sync实现的tryAcquireShared()方法，即让具体实现类决定是否让当前线程继续还是park,而FutureTask的tryAcquireShared方法所做的唯一事情就是检查状态，如果是RUNNING状态那么让当前线程park。而跑任务的线程会在任务结束时调用FutureTask 实例的set方法（与等待线程持相同的实例），设定执行结果，并且通过unpark唤醒正在等待的线程，返回结果。
+
+- [Java多线程（七）之同步器基础：AQS框架深入分析](https://blog.csdn.net/vernonzheng/article/details/8275624)
+
+#### 3. 其他概念
+> 公平锁：每个线程抢占锁的顺序为先后调用lock方法的顺序依次获取锁，类似于排队吃饭。
+
+> 非公平锁：每个线程抢占锁的顺序不定，谁运气好，谁就获取到锁，和调用lock方法的先后顺序无关，类似于堵车时，加塞的那些XXXX。
+
+> ReentrantLock 默认的lock（）方法采用的是非公平锁。
+
+**羊群效应**
+
+这里说一下羊群效应，当有多个线程去竞争同一个锁的时候，假设锁被某个线程占用，那么如果有成千上万个线程在等待锁，有一种做法是同时唤醒这成千上万个线程去去竞争锁，这个时候就发生了羊群效应，海量的竞争必然造成资源的剧增和浪费，因此终究只能有一个线程竞争成功，其他线程还是要老老实实的回去等待。AQS的FIFO的等待队列给解决在锁竞争方面的羊群效应问题提供了一个思路：保持一个FIFO队列，队列每个节点只关心其前一个节点的状态，线程唤醒也只唤醒队头等待线程。其实这个思路已经被应用到了分布式锁的实践中，见：Zookeeper分布式锁的改进实现方案。
 ### Callable、Future和FutureTask（TODO）
 
 ###  JDK8 的 CompletableFuture（TODO）
 
-### AQS（TODO）
+
 
 
 ## 5.5 Java 中的锁
