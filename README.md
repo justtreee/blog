@@ -2019,6 +2019,21 @@ int等不大于32位的基本类型的操作都是原子操作，但是某些jvm
 对于long和double变量，把它们作为2个原子性的32位值来对待，而不是一个原子性的64位值， 
 这样将一个long型的值保存到内存的时候，可能是2次32位的写操作， 
 2个竞争线程想写不同的值到内存的时候，可能导致内存中的值是不正确的结果。
+
+
+### 异常类的继承结构
+
+在整个Java的异常结构中，实际上有两个最常用的类，分别为Exception和Error，这两个类全都是Throwable的子类。
+
+![1006828-20170614163059821-1343167353](https://user-images.githubusercontent.com/15559340/44645532-830f1a00-aa0a-11e8-92bb-40f851ba1842.png)
+
+- Exception ： 一般标识的是程序中出现的问题，可以直接使用try---catch处理。
+
+- Error ： 一般值得是JVM错误，程序中无法处理。
+
+一般情况下，Exception和Error统称为异常，而算术异常（AtithmeticException）、数字格式化异常（NumberFormatException）等都属于Exception的子类。
+
+> 提示：e.printStatckTrace(); ： 打印的异常信息是最完整的。
 ## 5.2 String相关
 
 ### String、StringBuffer以及StringBuilder的区别
