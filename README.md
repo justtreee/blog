@@ -2428,6 +2428,51 @@ A,B之间如何通信的呢？也就是说，线程A如何知道 list.size() 已
 > 是否允许核心线程空闲退出，默认值为false。
 - queueCapacity
 > 任务队列容量。从maxPoolSize的描述上可以看出，任务队列的容量会影响到线程的变化，因此任务队列的长度也需要恰当的设置。
+
+### 3种常用的线程池
+下面是常用的四种线程池，它们都是基于Executor接口的实现类executor：
+
+#### SingleThreadExecutor
+单个线程的线程池，即线程池中每次只有一个线程工作，单线程串行执行任务，也就是说只有一个核心线程，所有操作都通过这一个线程来进行
+```java
+public static ExecutorService newSingleThreadExecutor() {
+    return new FinalizableDelegatedExecutorService
+        (new ThreadPoolExecutor(1, 1,
+                                0L, TimeUnit.MILLISECONDS,
+                                new LinkedBlockingQueue<Runnable>()));
+}
+```
+
+#### FixedThreadExecutor
+
+固定数量的线程池，每提交一个任务就是一个线程，直到达到线程池的最大数量，然后后面进入等待队列直到前面的任务完成才继续执行
+```java
+public static ExecutorService newFixedThreadPool(int nThreads) {
+    return new ThreadPoolExecutor(nThreads, nThreads,
+                                  0L, TimeUnit.MILLISECONDS,
+                                  new LinkedBlockingQueue<Runnable>());
+}
+```
+
+- FixedThreadPool的corePoolSize和maxiumPoolSize都被设置为创建FixedThreadPool时指定的参数nThreads。
+- 0L则表示当线程池中的线程数量操作核心线程的数量时，多余的线程将被立即停止
+- 最后一个参数表示FixedThreadPool使用了无界队列LinkedBlockingQueue作为线程池的做工队列，由于是无界的，当线程池的线程数达到corePoolSize后，新任务将在无界队列中等待，因此线程池的线程数量不会超过corePoolSize，同时maxiumPoolSize也就变成了一个无效的参数，并且运行中的线程池并不会拒绝任务
+
+
+#### CacheThreadExecutor（推荐使用）
+可缓存线程池，当线程池大小超过了处理任务所需的线程，那么就会回收部分空闲（一般是60秒无执行）的线程，当有任务来时，又智能的添加新线程来执行。
+
+CachedThreadPool是一个”无限“容量的线程池，它会根据需要创建新线程。下面是它的构造方法：
+
+```java
+public static ExecutorService newCachedThreadPool() {
+        return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                      60L, TimeUnit.SECONDS,
+                                      new SynchronousQueue<Runnable>());
+    }
+```
+
+
 -------
 
 ### 内存可见性与volatile 关键字
@@ -3854,6 +3899,15 @@ getInstance() 的性能对应用程序很关键。
 -  [Netflix 开源的 Hystrix 框架（TODO）](https://github.com/Netflix/Hystrix)
 - [防雪崩利器：熔断器 Hystrix 的原理与使用](https://segmentfault.com/a/1190000005988895)
 - [使用 Hystrix 实现自动降级与依赖隔离](http://www.importnew.com/25704.html)
+## 限流
+
+第4种是令牌桶算法限流，令牌桶算法从某种程度上来说是漏桶算法的一种改进，漏桶算法能够强行限制请求调用的速率，而令牌桶算法能够在限制调用的平均速率的同时还允许某种程度的突发调用。
+
+在令牌桶算法中，桶中会有一定数量的令牌，每次请求调用需要去桶中拿取一个令牌，拿到令牌后才有资格执行请求调用，否则只能等待能拿到足够的令牌数，读者看到这里，可能就认为是不是可以把令牌比喻成信号量，那和前面说的并发量限流不是没什么区别嘛？其实不然，令牌桶算法的精髓就在于“拿令牌”和“放令牌”的方式，这和单纯的并发量限流有明显区别，采用并发量限流时，当一个调用到来时，会先获取一个信号量，当调用结束时，会释放一个信号量，但令牌桶算法不同，因为每次请求获取的令牌数不是固定的。
+
+比如当桶中的令牌数还比较多时，每次调用只需要获取一个令牌，随着桶中的令牌数逐渐减少，当到令牌的使用率（即使用中的令牌数/令牌总数）达某个比例，可能一次请求需要获取两个令牌，当令牌使用率到了一个更高的比例，可能一次请求调用需要获取更多的令牌数。同时，当调用使用完令牌后，有两种令牌生成方法，第一种就是直接往桶中放回使用的令牌数，第二种就是不做任何操作，有另一个额外的令牌生成步骤来将令牌匀速放回桶中。
+- [常用限流方案的设计和实现](http://manzhizhen.iteye.com/blog/2311691)
+
 ## 缓存
 - 随着互联网的普及，内容信息越来越复杂，用户数和访问量越来越大，我们的应用需要支撑更多的并发量，同时我们的应用服务器和数据库服务器所做的计算也越来越多。但是往往我们的应用服务器资源是有限的，且技术变革是缓慢的，数据库每秒能接受的请求次数也是有限的（或者文件的读写也是有限的），如何能够有效利用有限的资源来提供尽可能大的吞吐量？一个有效的办法就是引入缓存，打破标准流程，每个环节中请求可以从缓存中直接获取目标数据并返回，从而减少计算量，有效提升响应速度，让有限的资源服务更多的用户。
 
@@ -3913,4 +3967,4 @@ getInstance() 的性能对应用程序很关键。
 
 - [参考链接：Java对象的序列化和反序列化](http://www.cnblogs.com/xdp-gacl/p/3777987.html)
 
-//08/17
+//08/31
