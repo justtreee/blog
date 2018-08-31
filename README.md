@@ -2476,6 +2476,8 @@ public static ExecutorService newCachedThreadPool() {
 -------
 
 ### 内存可见性与volatile 关键字
+
+
 线程在工作时，需要将主内存中的数据拷贝到工作内存中。这样对数据的任何操作都是基于工作内存(效率提高)，并且不能直接操作主内存以及其他线程工作内存中的数据，之后再将更新之后的数据刷新到主内存中。  
 这里所提到的主内存可以简单认为是堆内存，而工作内存则可以认为是栈内存。
 
@@ -2501,6 +2503,31 @@ volatile 修饰之后并不是让线程直接从主内存中获取数据，依�
 可以发现不管 JVM 怎么优化，前提都是保证单线程中最终结果不变的情况下进行的。  
 这里就能看出问题了，当 flag 没有被 volatile 修饰时，JVM 对 1 和 2 进行重排，导致 value 都还没有被初始化就有可能被线程 B 使用了。
 所以加上 volatile 之后可以防止这样的重排优化，保证业务的正确性。
+
+#### volatile关键字是如何保证可见性的?
+在单核CPU的情况下，是不存在可见性问题的，如果是多核CPU，可见性问题就会暴露出来。
+
+我们知道线程中运行的代码最终都是交给CPU执行的，而代码执行时所需使用到的数据来自于内存(或者称之为主存)。但是CPU是不会直接操作内存的，每个CPU都会有自己的缓存，操作缓存的速度比操作主存更快。
+
+因此当某个线程需要修改一个数据时，事实上步骤是如下的：
+
+1. 将主存中的数据加载到缓存中
+
+2. CPU对缓存中的数据进行修改
+
+3. 将修改后的值刷新到内存中
+
+问题就出现在第二步，因为每个CPU操作的是各自的缓存，所以不同的CPU之间是无法感知其他CPU对这个变量的修改的，最终就可能导致结果与我们的预期不符。
+
+而使用了volatile关键字之后，情况就有所不同，volatile关键字有两层语义：
+
+1. 立即将缓存中数据写会到内存中
+
+2. 其他处理器通过嗅探总线上传播过来了数据监测自己缓存的值是不是过期了，如果过期了，就会对应的缓存中的数据置为无效。而当处理器对这个数据进行修改时，会重新从内存中把数据读取到缓存中进行处理。
+
+在这种情况下，不同的CPU之间就可以感知其他CPU对变量的修改，并重新从内存中加载更新后的值，因此可以解决可见性问题。
+
+- [volatile关键字是如何保证可见性的](http://www.tianshouzhi.com/api/tutorials/mutithread/286)
 - [内存可见性与volatile 关键字](https://github.com/crossoverJie/Java-Interview/blob/master/MD/concurrent/volatile.md)
 ### synchronized的实现原理
 - synchronized可以保证方法或者代码块在运行时，同一时刻只有一个方法可以进入到临界区，同时它还可以保证共享变量的内存可见性
@@ -2814,6 +2841,52 @@ I/O 复用机制需要事件分发器（event dispatcher）。 事件分发器�
 - BIO方式适用于连接数目比较小且固定的架构，这种方式对服务器资源要求比较高，并发局限于应用中，JDK1.4以前的唯一选择，但程序直观简单易理解。
 
 - NIO方式适用于连接数目多且连接比较短（轻操作）的架构，比如聊天服务器，并发局限于应用中，编程比较复杂，JDK1.4开始支持。
+## 5.7 反射
+反射是框架中常用的方法。
+
+当Spring容器处理<bean>元素时，会使用Class.forName("com.programcreek.Foo")来初始化这个类，并再次使用反射获取<property>元素对应的setter方法，为对象的属性赋值。
+
+### 在 Java 的反射中，Class.forName 和 ClassLoader 的区别
+在java中Class.forName()和ClassLoader都可以对类进行加载。ClassLoader就是遵循双亲委派模型最终调用启动类加载器的类加载器，实现的功能是“通过一个类的全限定名来获取描述此类的二进制字节流”，获取到二进制流后放到JVM中。Class.forName()方法实际上也是调用的CLassLoader来实现的。
+
+Class.forName(String className)；这个方法的源码是
+```java
+@CallerSensitive
+    public static Class<?> forName(String className)
+                throws ClassNotFoundException {
+        Class<?> caller = Reflection.getCallerClass();
+        return forName0(className, true, ClassLoader.getClassLoader(caller), caller);
+    }
+```
+#### 应用场景
+在我们熟悉的Spring框架中的IOC的实现就是使用的ClassLoader。
+
+而在我们使用JDBC时通常是使用Class.forName()方法来加载数据库连接驱动。这是因为在JDBC规范中明确要求Driver(数据库驱动)类必须向DriverManager注册自己。
+
+以MySQL的驱动为例解释：
+```java
+public class Driver extends NonRegisteringDriver implements java.sql.Driver {  
+    static {  
+        try {  
+            java.sql.DriverManager.registerDriver(new Driver());  
+        } catch (SQLException E) {  
+            throw new RuntimeException("Can't register driver!");  
+        }  
+    }  
+    /** 
+     * Construct a new driver and register it with DriverManager 
+     * @throws SQLException 
+     *             if a database error occurs. 
+     */ 
+    public Driver() throws SQLException {  
+        // Required for Class.forName().newInstance()  
+    }  
+}
+```
+我们看到Driver注册到DriverManager中的操作写在了静态代码块中，这就是为什么在写JDBC时使用Class.forName()的原因了。
+
+
+- [在 Java 的反射中，Class.forName 和 ClassLoader 的区别](http://www.importnew.com/29389.html#comment-662769)
 
 # 七、JVM
 ## 7.1 JVM 内存模型
@@ -3088,6 +3161,8 @@ Java 中的堆也是 GC 收集垃圾的主要区域。GC 分为两种：Minor GC
 - 《深入了解Java虚拟机》 pdf P231 [《深入理解Java虚拟机》读书笔记5：类加载机制与字节码执行引擎](http://ginobefunny.com/post/deep_in_jvm_notes_part5/)
 ### 6.6.2 双亲委派模型
 #### 三个类加载器
+一个Java程序要想运行起来，首先需要经过编译生成 .class文件，然后创建一个运行环境（jvm）来加载字节码文件到内存运行，而.class 文件是怎样被加载中jvm 中的就是Java Classloader所做的事情。
+
 1. 根加载器 Bootstrap ClassLoader 一般用本地代码实现，负责加载JVM基础核心类库（rt.jar）；
 2. 扩展加载器 Extension ClassLoader 从java.ext.dirs系统属性所指定的目录中加载类库，它的父加载器是Bootstrap；
 3. 系统加载器 ApplicationClassLoader。又叫应用类加载器，其父类是Extension。它是应用最广泛的类加载器。它从环境变量classpath或者系统属性java.class.path所指定的目录中记载类，是用户自定义加载器的默认父加载器。
@@ -3967,4 +4042,4 @@ getInstance() 的性能对应用程序很关键。
 
 - [参考链接：Java对象的序列化和反序列化](http://www.cnblogs.com/xdp-gacl/p/3777987.html)
 
-//08/31
+//08/17
