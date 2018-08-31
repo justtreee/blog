@@ -2529,6 +2529,11 @@ volatile 修饰之后并不是让线程直接从主内存中获取数据，依�
 
 - [volatile关键字是如何保证可见性的](http://www.tianshouzhi.com/api/tutorials/mutithread/286)
 - [内存可见性与volatile 关键字](https://github.com/crossoverJie/Java-Interview/blob/master/MD/concurrent/volatile.md)
+### happens-before原则
+
+如果Java内存模型中所有的有序性都仅仅靠volatile和synchronized来完成，那么有一些操作将变得很繁琐，但是我们在编写Java代码时并未感觉到这一点，这是因为Java语言中有一个”先行发生（happens-before）”原则。这个原则非常重要，它是判断数据是否存在竞争、线程是否安全的主要依据，依靠这个原则，我们可以通过几条规则就判断出并发环境下两个操作之间是否可能存在冲突的问题。
+
+所谓先行发生原则是指Java内存模型中定义的两项操作之间的偏序关系，如果说操作A先行发生于操作B，那么操作A产生的影响能够被操作b观察到，”影响”包括修改了内存中共享变量的值、发送了消息、调用了方法等。Java内存模型下有一些天然的，不需要任何同步协助器就已经存在的先行发生关系。
 ### synchronized的实现原理
 - synchronized可以保证方法或者代码块在运行时，同一时刻只有一个方法可以进入到临界区，同时它还可以保证共享变量的内存可见性
 - 当一个线程访问同步代码块时，它首先是需要得到锁才能执行同步代码，当退出或者抛出异常时必须要释放锁.
