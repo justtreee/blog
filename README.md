@@ -12,6 +12,7 @@
 - [[04]数据库](https://github.com/justtreee/blog/blob/master/%5B04%5D%E6%95%B0%E6%8D%AE%E5%BA%93.md)
 - [[05]Redis](https://github.com/justtreee/blog/blob/master/%5B05%5DRedis.md)
 - [[06]Java](https://github.com/justtreee/blog/blob/master/%5B06%5DJava.md)
+  - [[06-1]Java-多线程-案例](https://github.com/justtreee/blog/blob/master/%5B06-1%5DJava多线程.md)
 - [[07]JVM](https://github.com/justtreee/blog/blob/master/%5B07%5DJVM.md)
 - [[08]Spring](https://github.com/justtreee/blog/blob/master/%5B08%5DSpring.md)
 - [[09]SpringBoot](https://github.com/justtreee/blog/blob/master/%5B09%5DSpringBoot.md)
