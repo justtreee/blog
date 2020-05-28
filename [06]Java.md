@@ -1,13 +1,13 @@
 # 六、Java
-## 5.1 基本知识
-### Java的Integer和int有什么区别
+# 5.1 基本知识
+## Java的Integer和int有什么区别
 - 最基本的一点区别是：Ingeter是int的包装类，int的初值为0，Ingeter的初值为null。
 
 - 无论如何，Integer与new Integer不会相等。不会经历拆箱过程，new出来的对象存放在堆，而非new的Integer常量则在常量池（在方法区），他们的内存地址不一样，所以为false。
 - 两个都是非new出来的Integer，如果数在-128到127之间，则是true,否则为false。因为java在编译Integer i2 = 128的时候,被翻译成：Integer i2 = Integer.valueOf(128);而valueOf()函数会对-128到127之间的数进行缓存。
 - 两个都是new出来的,都为false。还是内存地址不一样。
 - int和Integer(无论new否)比，都为true，因为会把Integer自动拆箱为int再去比。
-### Java中equals和==的区别
+## Java中equals和==的区别
 - ==可以用来比较基本类型和引用类型，判断内容和内存地址
 
 1. equals只能用来比较引用类型,它只判断内容。该函数存在于老祖宗类 java.lang.Object
@@ -20,7 +20,7 @@ java中的数据类型，可分为两类：
 所以，除非是同一个new出来的对象，他们的比较后的结果为true，否则比较后结果为false。
 
 - [链接](https://blog.csdn.net/jueblog/article/details/9347791)
-### java在静态类中能引用非静态方法吗
+## java在静态类中能引用非静态方法吗
 - 不能，但main是个例外
 - 首先static的成员是在类加载的时候初始化的，JVM的CLASSLOADER的加载，首次主动使用加载，而非static的成员是在创建对象的时候，即new 操作的时候才初始化的；
 - 先后顺序是先加载，才能初始化，那么加载的时候初始化static的成员，此时非static的成员还没有被加载必然不能使用，而非static的成员是在类加载之后，通过new操作符创建对象的时候初始化，此时static 已经分配内存空间，所以可以访问！
@@ -28,7 +28,7 @@ java中的数据类型，可分为两类：
 	
 [java在静态类中能引用非静态方法吗](https://blog.csdn.net/jiayi_yao/article/details/51346378)
 
-### 面向对象的三个基本特征
+## 面向对象的三个基本特征
 - 面向对象的三个基本特征是：封装、继承、多态。  
 
     ![mianxiangduixiang](http://www.cnitblog.com/images/cnitblog_com/lily/1972/o_OOBase.gif)
@@ -52,7 +52,7 @@ java中的数据类型，可分为两类：
 - [Java三大特性封装继承多态总结](https://blog.csdn.net/zjkC050818/article/details/78278658)   
 - [面向对象的三个基本特征 和 五种设计原则](https://blog.csdn.net/cancan8538/article/details/8057095)
 
-### 构造器的调用顺序
+## 构造器的调用顺序
 1. 父类静态代码块
 2. 子类静态代码块
 3. 父类代码块
@@ -60,7 +60,7 @@ java中的数据类型，可分为两类：
 5. 子类代码块
 6. 子类构造
 [java 子类继承父类运行顺序](https://blog.csdn.net/xu511739113/article/details/52302498)
-### 抽象类和接口的区别
+## 抽象类和接口的区别
 - 抽象类是用来捕捉子类的通用特性的 。它不能被实例化，只能被用作子类的超类。抽象类是被用来创建继承层级里子类的模板。  
 - 接口是抽象方法的集合。如果一个类实现了某个接口，那么它就继承了这个接口的抽象方法。这就像契约模式，如果实现了这个接口，那么就必须确保使用这些方法。  
 - 什么时候使用抽象类和接口
@@ -68,7 +68,7 @@ java中的数据类型，可分为两类：
     - 如果你想实现多重继承，那么你必须使用接口。由于Java不支持多继承，子类不能够继承多个类，但可以实现多个接口。因此你就可以使用接口来解决它。
     - 如果基本功能在不断改变，那么就需要使用抽象类。如果不断改变基本功能并且使用接口，那么就需要改变所有实现了该接口的类。
 - [抽象类和接口有什么区别，什么情况下会使用抽象类和什么情况你会使用接口](http://www.importnew.com/12399.html)  
-### 匿名内部类
+## 匿名内部类
 - 类名规则 定位$1
     - test方法中的匿名内部类的名字被起为 Test$1
 
@@ -76,7 +76,7 @@ java中的数据类型，可分为两类：
     - 可以继承其他类或实现其他接口。不仅是可以，而是必须!
 [匿名内部类](https://blog.csdn.net/lazyer_dog/article/details/50669473)
 
-### long和double类型变量的非原子性
+## long和double类型变量的非原子性
 int等不大于32位的基本类型的操作都是原子操作，但是某些jvm对long和double类型的操作并不是原子操作，这样就会造成错误数据的出现。 
 
 错误数据出现的原因是： 
@@ -85,7 +85,7 @@ int等不大于32位的基本类型的操作都是原子操作，但是某些jvm
 2个竞争线程想写不同的值到内存的时候，可能导致内存中的值是不正确的结果。
 
 
-### 异常类的继承结构
+## 异常类的继承结构
 
 在整个Java的异常结构中，实际上有两个最常用的类，分别为Exception和Error，这两个类全都是Throwable的子类。
 
@@ -98,14 +98,14 @@ int等不大于32位的基本类型的操作都是原子操作，但是某些jvm
 一般情况下，Exception和Error统称为异常，而算术异常（AtithmeticException）、数字格式化异常（NumberFormatException）等都属于Exception的子类。
 
 > 提示：e.printStatckTrace(); ： 打印的异常信息是最完整的。
-## 5.2 String相关
+# 5.2 String相关
 
-### String、StringBuffer以及StringBuilder的区别
+## String、StringBuffer以及StringBuilder的区别
 - `for(int i=0;i<10000;i++){string += "hello";` 这句 string += “hello”;的过程相当于将原有的string变量指向的对象内容取出与”hello”作字符串相加操作再存进另一个新的String对象当中，再让string变量指向新生成的对象。整个循环的执行过程，并且每次循环会new出一个StringBuilder对象，然后进行append操作，最后通过toString方法返回String对象。也就是说这个循环执行完毕new出了10000个对象，试想一下，如果这些对象没有被回收，会造成多大的内存资源浪费。
 
 - 那么有人会问既然有了StringBuilder类，为什么还需要StringBuffer类？查看源代码便一目了然，事实上，StringBuilder和StringBuffer类拥有的成员属性以及成员方法基本相同，区别是StringBuffer类的成员方法前面多了一个关键字：synchronized，不用多说，这个关键字是在多线程访问时起到安全保护作用的,也就是说StringBuffer是线程安全的。
 - [链接](http://www.importnew.com/18167.html)
-### 在java中String类为什么要设计成final
+## 在java中String类为什么要设计成final
 首先String类是用final关键字修饰，这说明String不可继承。再看下面，String类的主力成员字段value是个char[ ]数组，而且是用final修饰的。final修饰的字段创建以后就不可改变。
 
 **1. 为了安全**
@@ -124,7 +124,7 @@ int等不大于32位的基本类型的操作都是原子操作，但是某些jvm
 
 
 [在java中String类为什么要设计成final？](https://blog.csdn.net/u013905744/article/details/52414111)
-### String.GetHashCode()复杂度
+## String.GetHashCode()复杂度
 - 如果两个字符串对象是否相等，GetHashCode方法返回相同的值。 但是，有不为每个唯一字符串值是唯一的哈希代码值。 不同的字符串可以返回相同的哈希代码。
 
 - **Java的实现**
@@ -146,13 +146,13 @@ int等不大于32位的基本类型的操作都是原子操作，但是某些jvm
 	[科普：为什么 String hashCode 方法选择数字31作为乘子](https://segmentfault.com/a/1190000010799123)
 	> 31可以被 JVM 优化，31 * i = (i << 5) - i
 
-### String不变性
+## String不变性
 - 一旦字符串在内存（堆）中创建就不会被改变。记住：所有的String方法都不是改变字符串本身，而是创建一个新的字符串。
 
 - 如果需要自身可以改变的字符串则可以使用StringBuilder和StringBuffer，否则就会浪费大量的时间在垃圾回收上。
 
 - [String不变性(Java)](https://blog.csdn.net/sun_star1chen/article/details/17186151)
-### String驻留池
+## String驻留池
 对于以下代码：
 ```Java
 String s1="abc";	String s2="abc";
@@ -171,9 +171,9 @@ String s="abc";	String str=new String(s);
 
 - [String驻留池](https://blog.csdn.net/nzh1234/article/details/22181585)
 
-## 5.3 数据结构
+# 5.3 数据结构
 - **[各种数据结构的实现](http://wiki.jikexueyuan.com/project/java-collection/linkedhashmap.html)**  
-### List --> ArrayList / LinkedList / Vector
+## List --> ArrayList / LinkedList / Vector
 > 在Java中List接口有3个常用的实现类，分别是ArrayList、LinkedList、Vector。
 - ArrayList内部存储的数据结构是数组存储。数组的特点：元素可以快速访问。每个元素之间是紧邻的不能有间隔，缺点：数组空间不够元素存储需要扩容的时候会开辟一个新的数组把旧的数组元素拷贝过去，比较消性能。从ArrayList中间位置插入和删除元素，都需要循环移动元素的位置，因此数组特性决定了数组的特点：适合随机查找和遍历，不适合经常需要插入和删除操作。
 - Vector内部实现和ArrayList一样都是数组存储，最大的不同就是它支持线程的同步，所以访问比ArrayList慢，但是数据安全，所以对元素的操作没有并发操作的时候用ArrayList比较快。
@@ -182,9 +182,9 @@ String s="abc";	String str=new String(s);
 - [LinkedList, ArrayList等使用场景和性能分析](http://www.cnblogs.com/skywang12345/p/3308900.html)
 - [java中List接口的实现类 ArrayList，LinkedList，Vector 的区别 list实现类源码分析](https://blog.csdn.net/qq_30739519/article/details/50877217)
 
-### Map --> HashMap / ConcurrentHashMap / TreeMap / LinkedHashMap
-#### 1. HashMap
-##### 1.1 结构与参数
+## Map --> HashMap / ConcurrentHashMap / TreeMap / LinkedHashMap
+### 1. HashMap
+#### 1.1 结构与参数
 系统在初始化HashMap时，会创建一个 长度为 capacity 的 Entry 数组，这个数组里可以存储元素的位置被称为“桶（bucket）”，每个 bucket 都有其指定索引，系统可以根据其索引快速访问该 bucket 里存储的元素。
 
 在HashMap中有两个很重要的参数，容量(Capacity)和负载因子(Load factor)：  
@@ -201,7 +201,7 @@ String s="abc";	String str=new String(s);
 
 当创建 HashMap 时，有一个默认的负载因子（load factor），其默认值为 0.75，这是时间和空间成本上一种折衷：增大负载因子可以减少 Hash 表（就是那个 Entry 数组）所占用的内存空间，但会增加查询数据的时间开销，而查询是最频繁的的操作（HashMap 的 get() 与 put() 方法都要用到查询）；减小负载因子会提高数据查询的性能，但会增加 Hash 表所占用的内存空间。 通常情况下，程序员无需改变负载因子的值。
 
-##### 1.2 put()函数的实现
+#### 1.2 put()函数的实现
 put函数大致的思路为：
 
 1. 对key的hashCode()做hash，然后再计算index;
@@ -211,13 +211,13 @@ put函数大致的思路为：
 5. 如果节点已经存在就替换old value(保证key的唯一性)
 6. 如果bucket满了(超过load factor*current capacity)，就要resize。
 
-##### 1.3 get()函数的实现
+#### 1.3 get()函数的实现
 大致思路如下：
 1. bucket里的第一个节点，直接命中；
 2. 如果有冲突，则通过key.equals(k)去查找对应的entry
 - 若为树，则在树中通过key.equals(k)查找，O(logn)；
 - 若为链表，则在链表中通过key.equals(k)查找，O(n)。
-##### 1.4 hash函数的实现
+#### 1.4 hash函数的实现
 过程如下图：
 ![hashindex](https://cloud.githubusercontent.com/assets/1736354/6957712/293b52fc-d932-11e4-854d-cb47be67949a.png)
 ```java
@@ -237,7 +237,7 @@ static final int hash(Object key) {
 
 **注意：hash和计算下标是不一样的，hash是计算下标过程的一部分**
 
-##### 1.5 RESIZE 的实现
+#### 1.5 RESIZE 的实现
 当put时，如果发现目前的bucket占用程度已经超过了Load Factor所希望的比例，为了减少碰撞率，就会执行resize。resize的过程，简单的说就是把bucket扩充为2倍，之后重新计算index，把节点再放到新的bucket中。
 
 > 怎么理解呢？例如我们从16扩展为32时，具体的变化如下所示：
@@ -256,7 +256,7 @@ static final int hash(Object key) {
 
 >这个设计确实非常的巧妙，既省去了重新计算hash值的时间，而且同时，由于新增的1bit是0还是1可以认为是随机的，因此resize的过程，均匀的把之前的冲突的节点分散到新的bucket了。
 
-##### 1.6 [Hashmap为什么容量是2的幂次](https://blog.csdn.net/a_long_/article/details/51594159)
+#### 1.6 [Hashmap为什么容量是2的幂次](https://blog.csdn.net/a_long_/article/details/51594159)
 
 最理想的效果是，Entry数组中每个位置都只有一个元素，这样，查询的时候效率最高，不需要遍历单链表，也不需要通过equals去比较K，而且空间利用率最大。那如何计算才会分布最均匀呢？我们首先想到的就是%运算，哈希值%容量=bucketIndex。
  ```java
@@ -266,7 +266,7 @@ static int indexFor(int h, int length) {
 ```
 这个等式实际上可以推理出来，2^n转换成二进制就是1+n个0，减1之后就是0+n个1，如16 -> 10000，15 -> 01111，那根据&位运算的规则，都为1(真)时，才为1，那0≤运算后的结果≤15，假设h <= 15，那么运算后的结果就是h本身，h >15，运算后的结果就是最后三位二进制做&运算后的值，最终，就是%运算后的余数，我想，这就是容量必须为2的幂的原因。
 
-##### 1.7 总结
+#### 1.7 总结
 
 **1. 什么是HashMap？你为什么用到它？**
 是基于Map接口的实现，存储键值对时，它可以接收null的键值，是非同步的，HashMap存储着Entry(hash, key, value, next)对象。
@@ -305,7 +305,7 @@ JDK的做法是链表法，Entry用一个next属性实现多个Entry以单向链
 
 -----
 [Java 集合类实现原理](https://www.jianshu.com/p/0b2ad1952506)
-#### 2. ConcurrentHashMap
+### 2. ConcurrentHashMap
 > ConcurrentHashMap 同样也分为 1.7 、1.8 版，两者在实现上略有不同。
 
 【1.7】  
@@ -354,7 +354,7 @@ ConcurrentHashMap 的 get 方法是非常高效的，因为整个过程都不需
 
 --------------
 
-#### 3. 使用LinkedHashMap设计实现一个LRU Cache  
+### 3. 使用LinkedHashMap设计实现一个LRU Cache  
 实际上就是 HashMap 和 LinkedList 两个集合类的存储结构的结合。在 LinkedHashMapMap 中，所有 put 进来的 Entry 都保存在哈希表中，但它又额外定义了一个 head 为头结点的空的双向循环链表，每次 put 进来 HashMapEntry ，除了将其保存到对哈希表中对应的位置上外，还要将其插入到双向循环链表的尾部。
 
 ```java
@@ -386,7 +386,7 @@ public int get(int key){
 - [动手实现一个 LRU cache的三个思路](https://crossoverjie.top/2018/04/07/algorithm/LRU-cache/)  
 - [如何设计实现一个LRU Cache](https://github.com/Yikun/yikun.github.com/issues/9)
 - [LinkedHashMap 的实现原理](http://wiki.jikexueyuan.com/project/java-collection/linkedhashmap.html)
-#### 4. 基于HashMap和双向链表的实现LRU Cache
+### 4. 基于HashMap和双向链表的实现LRU Cache
 ![1](https://cloud.githubusercontent.com/assets/1736354/6984935/92033a96-da60-11e4-8754-66135bb0d233.png)
 - [如何设计实现一个LRU Cache？](https://yikun.github.io/2015/04/03/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AALRU-Cache%EF%BC%9F/)
 ```java
@@ -456,11 +456,11 @@ public class LRUCache {
 }
 ```
 
-### Set --> HashSet / TreeSet(TODO)
+## Set --> HashSet / TreeSet(TODO)
 [Java 集合类实现原理](https://jianshu.com/p/0b2ad1952506)
 
-## 5.4 多线程 并发
-### JAVA多线程之线程间的通信方式
+# 5.4 多线程 并发
+## JAVA多线程之线程间的通信方式
 1. 同步  
 这里讲的同步是指多个线程通过synchronized关键字这种方式来实现线程间的通信。  
 由于线程A和线程B持有同一个MyObject类的对象object，尽管这两个线程需要调用不同的方法，但是它们是同步执行的，比如：线程B需要等待线程A执行完了methodA()方法之后，它才能执行methodB()方法。这样，线程A和线程B就实现了 通信。
@@ -493,10 +493,10 @@ A,B之间如何通信的呢？也就是说，线程A如何知道 list.size() 已
 - queueCapacity
 > 任务队列容量。从maxPoolSize的描述上可以看出，任务队列的容量会影响到线程的变化，因此任务队列的长度也需要恰当的设置。
 
-### 3种常用的线程池
+## 3种常用的线程池
 下面是常用的四种线程池，它们都是基于Executor接口的实现类executor：
 
-#### SingleThreadExecutor
+### SingleThreadExecutor
 单个线程的线程池，即线程池中每次只有一个线程工作，单线程串行执行任务，也就是说只有一个核心线程，所有操作都通过这一个线程来进行
 ```java
 public static ExecutorService newSingleThreadExecutor() {
@@ -507,7 +507,7 @@ public static ExecutorService newSingleThreadExecutor() {
 }
 ```
 
-#### FixedThreadExecutor
+### FixedThreadExecutor
 
 固定数量的线程池，每提交一个任务就是一个线程，直到达到线程池的最大数量，然后后面进入等待队列直到前面的任务完成才继续执行
 ```java
@@ -523,7 +523,7 @@ public static ExecutorService newFixedThreadPool(int nThreads) {
 - 最后一个参数表示FixedThreadPool使用了无界队列LinkedBlockingQueue作为线程池的做工队列，由于是无界的，当线程池的线程数达到corePoolSize后，新任务将在无界队列中等待，因此线程池的线程数量不会超过corePoolSize，同时maxiumPoolSize也就变成了一个无效的参数，并且运行中的线程池并不会拒绝任务
 
 
-#### CacheThreadExecutor（推荐使用）
+### CacheThreadExecutor（推荐使用）
 可缓存线程池，当线程池大小超过了处理任务所需的线程，那么就会回收部分空闲（一般是60秒无执行）的线程，当有任务来时，又智能的添加新线程来执行。
 
 CachedThreadPool是一个”无限“容量的线程池，它会根据需要创建新线程。下面是它的构造方法：
@@ -539,7 +539,7 @@ public static ExecutorService newCachedThreadPool() {
 
 -------
 
-### 内存可见性与volatile 关键字
+## 内存可见性与volatile 关键字
 
 
 线程在工作时，需要将主内存中的数据拷贝到工作内存中。这样对数据的任何操作都是基于工作内存(效率提高)，并且不能直接操作主内存以及其他线程工作内存中的数据，之后再将更新之后的数据刷新到主内存中。  
@@ -568,7 +568,7 @@ volatile 修饰之后并不是让线程直接从主内存中获取数据，依�
 这里就能看出问题了，当 flag 没有被 volatile 修饰时，JVM 对 1 和 2 进行重排，导致 value 都还没有被初始化就有可能被线程 B 使用了。
 所以加上 volatile 之后可以防止这样的重排优化，保证业务的正确性。
 
-#### volatile关键字是如何保证可见性的?
+### volatile关键字是如何保证可见性的?
 在单核CPU的情况下，是不存在可见性问题的，如果是多核CPU，可见性问题就会暴露出来。
 
 我们知道线程中运行的代码最终都是交给CPU执行的，而代码执行时所需使用到的数据来自于内存(或者称之为主存)。但是CPU是不会直接操作内存的，每个CPU都会有自己的缓存，操作缓存的速度比操作主存更快。
@@ -593,18 +593,18 @@ volatile 修饰之后并不是让线程直接从主内存中获取数据，依�
 
 - [volatile关键字是如何保证可见性的](http://www.tianshouzhi.com/api/tutorials/mutithread/286)
 - [内存可见性与volatile 关键字](https://github.com/crossoverJie/Java-Interview/blob/master/MD/concurrent/volatile.md)
-### happens-before原则
+## happens-before原则
 
 如果Java内存模型中所有的有序性都仅仅靠volatile和synchronized来完成，那么有一些操作将变得很繁琐，但是我们在编写Java代码时并未感觉到这一点，这是因为Java语言中有一个”先行发生（happens-before）”原则。这个原则非常重要，它是判断数据是否存在竞争、线程是否安全的主要依据，依靠这个原则，我们可以通过几条规则就判断出并发环境下两个操作之间是否可能存在冲突的问题。
 
 所谓先行发生原则是指Java内存模型中定义的两项操作之间的偏序关系，如果说操作A先行发生于操作B，那么操作A产生的影响能够被操作b观察到，”影响”包括修改了内存中共享变量的值、发送了消息、调用了方法等。Java内存模型下有一些天然的，不需要任何同步协助器就已经存在的先行发生关系。
-### synchronized的实现原理
+## synchronized的实现原理
 - synchronized可以保证方法或者代码块在运行时，同一时刻只有一个方法可以进入到临界区，同时它还可以保证共享变量的内存可见性
 - 当一个线程访问同步代码块时，它首先是需要得到锁才能执行同步代码，当退出或者抛出异常时必须要释放锁.
 - 锁的机制可以参考互斥锁自旋锁。
 - [链接](https://blog.csdn.net/chenssy/article/details/54883355)
 - [Java中synchronized的实现原理与应用(详细)](https://blog.csdn.net/u012465296/article/details/53022317  )
-#### 应用方式
+### 应用方式
 - synchronized关键字最主要有以下3种应用方式，下面分别介绍  
         - 修饰实例方法，作用于当前实例加锁，进入同步代码前要获得当前实例的锁
         - 修饰静态方法，作用于当前类对象加锁，进入同步代码前要获得当前类对象的锁
@@ -613,7 +613,7 @@ volatile 修饰之后并不是让线程直接从主内存中获取数据，依�
 2. **修饰静态方法**: 由于synchronized关键字修饰的是静态increase方法，与修饰实例方法不同的是，其锁对象是当前类的class对象。注意代码中的increase4Obj方法是实例方法，其对象锁是当前实例对象，如果别的线程调用该方法，将不会产生互斥现象，毕竟锁对象不同，但我们应该意识到这种情况下可能会发现线程安全问题(操作了共享静态变量i)。
 3. **修饰代码块**在某些情况下，我们编写的方法体可能比较大，同时存在一些比较耗时的操作，而需要同步的代码又只有一小部分，如果直接对整个方法进行同步操作，可能会得不偿失，此时我们可以使用同步代码块的方式对需要同步的代码进行包裹，这样就无需对整个方法进行同步操作了
 
-#### 实现原理  
+### 实现原理  
 - Java对象头
     - 在JVM中，对象在内存中的布局分为三块区域：对象头、实例数据和对齐填充。
     - synchronized使用的锁是存放在Java对象头里面，具体位置是对象头里面的MarkWord，MarkWord里默认数据是存储对象的HashCode等信息，但是会随着对象的运行改变而发生变化，不同的锁状态对应着不同的记录存储方式
@@ -636,11 +636,11 @@ volatile 修饰之后并不是让线程直接从主内存中获取数据，依�
 
 
 
-### Synchronized 与 ReentrantLock 的区别
-#### 相似点
+## Synchronized 与 ReentrantLock 的区别
+### 相似点
 这两种同步方式有很多相似之处，它们都是加锁方式同步，而且都是阻塞式的同步，也就是说当如果一个线程获得了对象锁，进入了同步块，其他访问该同步块的线程都必须阻塞在同步块外面等待，而进行线程阻塞和唤醒的代价是比较高的（操作系统需要在用户态与内核态之间来回切换，代价很高，不过可以通过对锁优化进行改善）。
 
-#### 区别
+### 区别
 这两种方式最大区别就是：
 
 - 对于Synchronized来说，它是java语言的关键字，是原生语法层面的互斥，需要jvm实现，不但可以通过一些监控工具监控synchronized的锁定，而且在代码执行时出现异常，JVM会自动释放锁定。
@@ -700,8 +700,8 @@ class MyThread implements Runnable {
 
 [java的两种同步方式， Synchronized与ReentrantLock的区别](https://blog.csdn.net/chenchaofuck1/article/details/51045134)
 [Synchronized与Lock锁的区别](http://hanhailong.com/2016/12/10/Synchronized%E4%B8%8ELock%E9%94%81%E7%9A%84%E5%8C%BA%E5%88%AB/)
-### AQS
-#### 1. 什么是AQS
+## AQS
+### 1. 什么是AQS
 AQS：AbstractQueuedSynchronizer，即队列同步器。它是构建锁或者其他同步组件的基础框架（如ReentrantLock、ReentrantReadWriteLock、Semaphore等），JUC并发包的作者（Doug Lea）期望它能够成为实现大部分同步需求的基础。它是JUC并发包中的核心基础组件。
 
 如上所述，AQS管理一个关于状态信息的单一整数，该整数可以表现任何状态。比如， `Semaphore` 用它来表现剩余的许可数，`ReentrantLock` 用它来表现拥有它的线程已经请求了多少次锁；`FutureTask` 用它来表现任务的状态(尚未开始、运行、完成和取消)
@@ -715,7 +715,7 @@ AQS通过内置的FIFO同步队列来完成资源获取线程的排队工作，�
 4. `boolean tryReleaseShared(int arg)` 
 5. `boolean isHeldExclusively()`
 
-#### 2. AQS在各同步器内的Sync与State实现
+### 2. AQS在各同步器内的Sync与State实现
 **2.1 什么是state机制：**
 提供 volatile 变量 state;  用于同步线程之间的共享状态。通过 CAS 和 volatile 保证其原子性和可见性。对应源码里的定义：
 ```java
@@ -757,7 +757,7 @@ protected final boolean compareAndSetState(int expect, int update) {
 
 - [Java多线程（七）之同步器基础：AQS框架深入分析](https://blog.csdn.net/vernonzheng/article/details/8275624)
 
-#### 3. 其他概念
+### 3. 其他概念
 > 公平锁：每个线程抢占锁的顺序为先后调用lock方法的顺序依次获取锁，类似于排队吃饭。
 
 > 非公平锁：每个线程抢占锁的顺序不定，谁运气好，谁就获取到锁，和调用lock方法的先后顺序无关，类似于堵车时，加塞的那些XXXX。
@@ -767,19 +767,19 @@ protected final boolean compareAndSetState(int expect, int update) {
 **羊群效应**
 
 这里说一下羊群效应，当有多个线程去竞争同一个锁的时候，假设锁被某个线程占用，那么如果有成千上万个线程在等待锁，有一种做法是同时唤醒这成千上万个线程去去竞争锁，这个时候就发生了羊群效应，海量的竞争必然造成资源的剧增和浪费，因此终究只能有一个线程竞争成功，其他线程还是要老老实实的回去等待。AQS的FIFO的等待队列给解决在锁竞争方面的羊群效应问题提供了一个思路：保持一个FIFO队列，队列每个节点只关心其前一个节点的状态，线程唤醒也只唤醒队头等待线程。其实这个思路已经被应用到了分布式锁的实践中，见：Zookeeper分布式锁的改进实现方案。
-### Callable、Future和FutureTask（TODO）
+## Callable、Future和FutureTask（TODO）
 
-###  JDK8 的 CompletableFuture（TODO）
-
-
+##  JDK8 的 CompletableFuture（TODO）
 
 
-## 5.5 Java 中的锁
-### 锁
+
+
+# 5.5 Java 中的锁
+## 锁
 - [Java 中的锁](http://www.importnew.com/19472.html)
 - 包括：1.公平锁和非公平锁、2.自旋锁、3.锁消除、4.锁粗化、5.可重入锁、6.类锁和对象锁、7.偏向锁、轻量级锁和重量级锁、8.悲观锁和乐观锁、9.共享锁和排它锁、10.读写锁、11.互斥锁、12.无锁
 
-### 锁的粒度
+## 锁的粒度
 - [并发性能优化 ： 降低锁粒度](http://www.importnew.com/20920.html)
 - 当我们需要使用并发时， 常常有一个资源必须被两个或多个线程共享。在这种情况下，就存在一个竞争条件，也就是其中一个线程可以得到锁（锁与特定资源绑定），其他想要得到锁的线程会被阻塞。这个同步机制的实现是有代价的，为了向你提供一个好用的同步模型，JVM 和操作系统都要消耗资源。有三个最重要的因素使并发的实现会消耗大量资源，它们是：
 	1. 上下文切换	
@@ -788,8 +788,8 @@ protected final boolean compareAndSetState(int expect, int update) {
 - 介绍一种通过降低锁粒度的技术来减少这些因素。让我们从一个基本原则开始：**不要长时间持有不必要的锁**。
 - 在获得锁之前做完所有需要做的事，只把锁用在需要同步的资源上，用完之后立即释放它。详情见链接。
 
-## 5.6 NIO
-### 概述
+# 5.6 NIO
+## 概述
 - NIO本身是基于事件驱动思想来完成的，
 - 其主要想解决的是BIO的大并发问题： 在使用同步I/O的网络应用中，如果要同时处理多个客户端请求，或是在客户端要同时和多个服务器进行通讯，就必须使用多线程来处理。也就是说，将每一个客户端请求分配给一个线程来单独处理。这样做虽然可以达到我们的要求，但同时又会带来另外一个问题。由于每创建一个线程，就要为这个线程分配一定的内存空间（也叫工作存储器），而且操作系统本身也对线程的总数有一定的限制。如果客户端的请求过多，服务端程序可能会因为不堪重负而拒绝客户端的请求，甚至服务器可能会因此而瘫痪。  
 - NIO基于Reactor，当socket有流可读或可写入socket时，操作系统会相应的通知引用程序进行处理，应用再将流读取到缓冲区或写入操作系统。  也就是说，这个时候，已经不是一个连接就要对应一个处理线程了，而是有效的请求，对应一个线程，当连接没有数据时，是没有工作线程来处理的。  
@@ -799,7 +799,7 @@ protected final boolean compareAndSetState(int expect, int update) {
 >
 >总的来说NIO只是在BIO上做一个简单封装，让你专注到实现功能中去，不用再考虑网络IO阻塞的问题。
 
-### NIO是怎么工作的
+## NIO是怎么工作的
 所有的系统I/O都分为两个阶段：等待就绪和操作。举例来说，读函数，分为等待系统可读和真正的读；同理，写函数分为等待网卡可以写和真正的写。
 
 需要说明的是等待就绪的阻塞是不使用CPU的，是在“空等”；而真正的读写操作的阻塞是使用CPU的，真正在"干活"，而且这个过程非常快，属于memory copy，带宽通常在1GB/s级别以上，可以理解为基本不耗时。
@@ -817,7 +817,7 @@ protected final boolean compareAndSetState(int expect, int update) {
 NIO一个重要的特点是：socket主要的读、写、注册和接收函数，在等待就绪阶段都是非阻塞的，真正的I/O操作是同步阻塞的（消耗CPU但性能非常高）。
 
 
-#### 结合事件模型使用NIO同步非阻塞特性
+### 结合事件模型使用NIO同步非阻塞特性
 回忆BIO模型，之所以需要多线程，是因为在进行I/O操作的时候，一是没有办法知道到底能不能写、能不能读，只能"傻等"，即使通过各种估算，算出来操作系统没有能力进行读写，也没法在`socket.read()`和`socket.write()`函数中返回，这两个函数无法进行有效的中断。所以除了多开线程另起炉灶，没有好的办法利用CPU。
 
 NIO的读写函数可以立刻返回，这就给了我们不开线程利用CPU的最好机会：如果一个连接不能读写（`socket.read()`返回`0`或者`socket.write()`返回`0`），我们可以 **把这件事记下来，记录的方式通常是在`Selector`上注册标记位，然后切换到其它就绪的连接（`channel`）继续进行读写。**
@@ -856,25 +856,25 @@ class IoThread extends Thread{
 ```
 这个程序很简短，也是最简单的Reactor模式：注册所有感兴趣的事件处理器，单线程轮询选择就绪事件，执行事件处理器。
 
-### BIO、NIO两者的主要区别
+## BIO、NIO两者的主要区别
 | BIO（IO） | NIO |
 | :--- | ------|
 | 面向流 | 面向缓冲 |
 | 阻塞IO | 非阻塞IO |
 | 无 | 选择器（selector） |
-#### 面向流与面向缓冲
+### 面向流与面向缓冲
 Java BIO面向流意味着每次从流中读一个或多个字节，直至读取所有字节，它们没有被缓存在任何地方。此外，它不能前后移动流中的数据。如果需要前后移动从流中读取的数据，需要先将它缓存到一个缓冲区。 
 
 Java NIO的缓冲导向方法略有不同。数据读取到一个它稍后处理的缓冲区，需要时可在缓冲区中前后移动。这就增加了处理过程中的灵活性。但是，还需要检查是否该缓冲区中包含所有您需要处理的数据。而且，需确保当更多的数据读入缓冲区时，不要覆盖缓冲区里尚未处理的数据。
 
-#### 阻塞与非阻塞IO
+### 阻塞与非阻塞IO
 Java BIO的各种流是阻塞的。这意味着，当一个线程调用read() 或 write()时，该线程被阻塞，直到有一些数据被读取，或数据完全写入。该线程在此期间不能再干任何事情了。
 
 Java NIO的非阻塞模式，使一个线程从某通道发送请求读取数据，但是它仅能得到目前可用的数据，如果目前没有数据可用时，就什么都不会获取。而不是保持线程阻塞，所以直至数据变的可以读取之前，该线程可以继续做其他的事情。 非阻塞写也是如此。一个线程请求写入一些数据到某通道，但不需要等待它完全写入，这个线程同时可以去做别的事情。 **线程通常将非阻塞IO的空闲时间用于在其它通道上执行IO操作，所以一个单独的线程现在可以管理多个输入和输出通道（channel）。**
 
-### NIO的核心部分
+## NIO的核心部分
 NIO主要有三大核心部分：Channel(通道)，Buffer(缓冲区), Selector。传统IO基于字节流和字符流进行操作，而NIO基于Channel和Buffer(缓冲区)进行操作，数据总是从通道读取到缓冲区中，或者从缓冲区写入到通道中。Selector(选择区)用于监听多个通道的事件（比如：连接打开，数据到达）。因此，单个线程可以监听多个数据通道Channel。
-#### 2.1 Channel
+### 2.1 Channel
 首先说一下Channel，国内大多翻译成“通道”。Channel和IO中的Stream(流)是差不多一个等级的。只不过Stream是单向的，譬如：InputStream, OutputStream.而Channel是双向的，既可以用来进行读操作，又可以用来进行写操作。 
 NIO中的Channel的主要实现有：
 - FileChannel
@@ -882,7 +882,7 @@ NIO中的Channel的主要实现有：
 - SocketChannel
 - ServerSocketChannel
 这里看名字就可以猜出个所以然来：分别可以对应文件IO、UDP和TCP（Server和Client）。
-#### 2.2 Buffer
+### 2.2 Buffer
 通常情况下，操作系统的一次写操作分为两步：
 
 将数据从用户空间拷贝到系统空间。
@@ -892,34 +892,34 @@ NIO中的Channel的主要实现有：
 对于NIO来说，缓存的使用可以使用DirectByteBuffer和HeapByteBuffer。如果使用了DirectByteBuffer，一般来说可以减少一次系统空间到用户空间的拷贝。但Buffer创建和销毁的成本更高，更不宜维护，通常会用内存池来提高性能。
 
 如果数据量比较小的中小应用情况下，可以考虑使用heapBuffer；反之可以用directBuffer。
-#### 2.3 Selectors 选择器
+### 2.3 Selectors 选择器
 Java NIO的选择器允许一个单独的线程同时监视多个通道，可以注册多个通道到同一个选择器上，然后使用一个单独的线程来“选择”已经就绪的通道。这种“选择”机制为一个单独线程管理多个通道提供了可能。
 
 Selector运行单线程处理多个Channel，如果你的应用打开了多个通道，但每个连接的流量都很低，使用Selector就会很方便。例如在一个聊天服务器中。要使用Selector, 得向Selector注册Channel，然后调用它的select()方法。这个方法会一直阻塞到某个注册的通道有事件就绪。一旦这个方法返回，线程就可以处理这些事件，事件的例子有如新的连接进来、数据接收等。
 
-#### 2.4 Proactor与Reactor
+### 2.4 Proactor与Reactor
 I/O 复用机制需要事件分发器（event dispatcher）。 事件分发器的作用，即将那些读写事件源分发给各读写事件的处理者，就像送快递的在楼下喊: 谁谁谁的快递到了， 快来拿吧！开发人员在开始的时候需要在分发器那里注册感兴趣的事件，并提供相应的处理者（event handler)，或者是回调函数；事件分发器在适当的时候，会将请求的事件分发给这些handler或者回调函数。
 
 - 在Reactor模式中，事件分发器等待某个事件或者可应用或个操作的状态发生（比如文件描述符可读写，或者是socket可读写），事件分发器就把这个事件传给事先注册的事件处理函数或者回调函数，由后者来做实际的读写操作。
 - 在Proactor模式中，事件处理者（或者代由事件分发器发起）直接发起一个异步读写操作（相当于请求），**而实际的工作是由操作系统来完成的**。发起时，需要提供的参数包括用于存放读到数据的缓存区、读的数据大小或用于存放外发数据的缓存区，以及这个请求完后的回调函数等信息。事件分发器得知了这个请求，它默默等待这个请求的完成，然后转发完成事件给相应的事件处理者或者回调。举例来说，在Windows上事件处理者投递了一个异步IO操作（称为overlapped技术），事件分发器等IO Complete事件完成。这种异步模式的典型实现是基于操作系统底层异步API的，**所以我们可称之为“系统级别”的或者“真正意义上”的异步，因为具体的读写是由操作系统代劳的。**
 
-### NIO存在的问题
+## NIO存在的问题
 - 使用NIO != 高性能，当连接数<1000，并发程度不高或者局域网环境下NIO并没有显著的性能优势。
 
 - NIO并没有完全屏蔽平台差异，它仍然是基于各个操作系统的I/O系统实现的，差异仍然存在。使用NIO做网络编程构建事件驱动模型并不容易，陷阱重重。
 
 - 推荐大家使用成熟的NIO框架，如Netty，MINA等。解决了很多NIO的陷阱，并屏蔽了操作系统的差异，有较好的性能和编程模型。
 
-### 适用范围
+## 适用范围
 - BIO方式适用于连接数目比较小且固定的架构，这种方式对服务器资源要求比较高，并发局限于应用中，JDK1.4以前的唯一选择，但程序直观简单易理解。
 
 - NIO方式适用于连接数目多且连接比较短（轻操作）的架构，比如聊天服务器，并发局限于应用中，编程比较复杂，JDK1.4开始支持。
-## 5.7 反射
+# 5.7 反射
 反射是框架中常用的方法。
 
 当Spring容器处理<bean>元素时，会使用Class.forName("com.programcreek.Foo")来初始化这个类，并再次使用反射获取<property>元素对应的setter方法，为对象的属性赋值。
 
-### 在 Java 的反射中，Class.forName 和 ClassLoader 的区别
+## 在 Java 的反射中，Class.forName 和 ClassLoader 的区别
 在java中Class.forName()和ClassLoader都可以对类进行加载。ClassLoader就是遵循双亲委派模型最终调用启动类加载器的类加载器，实现的功能是“通过一个类的全限定名来获取描述此类的二进制字节流”，获取到二进制流后放到JVM中。Class.forName()方法实际上也是调用的CLassLoader来实现的。
 
 Class.forName(String className)；这个方法的源码是
@@ -931,7 +931,7 @@ Class.forName(String className)；这个方法的源码是
         return forName0(className, true, ClassLoader.getClassLoader(caller), caller);
     }
 ```
-#### 应用场景
+### 应用场景
 在我们熟悉的Spring框架中的IOC的实现就是使用的ClassLoader。
 
 而在我们使用JDBC时通常是使用Class.forName()方法来加载数据库连接驱动。这是因为在JDBC规范中明确要求Driver(数据库驱动)类必须向DriverManager注册自己。
