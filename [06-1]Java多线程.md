@@ -62,7 +62,6 @@ void funcB() {
 }
 ```
 
-
 ## 多线程环境下单例模式的规范写法
 编写的单例模式不够规范，下面介绍两种规范写法供大家参考
 
@@ -133,8 +132,7 @@ public class Singleton() {
 - 注意事项（WHY）：
 1. private构造函数：作用同上
 2. 线程安全：静态内部类变量INSTANCE只会在第一次调用getInstance()，加载类SingletonInstance时初始化，保证了线程安全 
-3. 懒加载：作用同上
-
+3. 懒加载：作用同上  
 
 ## 多线程更新list后，获取数据为空
 > 关键: ArrayList 并不是线程安全
@@ -162,15 +160,13 @@ public boolean add(E e) {
 - 首先准备demo代码
 ```java
 public class incre {
-public void test() {
-int[] list = new int[32];
-int i = 8;
-list[i++] = 10; // 主要看自增操作与赋值操作的先后顺序，直觉来说应该是自增
-}
+	public void test() {
+		int[] list = new int[32];
+		int i = 8;
+		list[i++] = 10; // 主要看自增操作与赋值操作的先后顺序，直觉来说应该是自增
+	}
 }
 ```
-
-
 - 编译并查看
 ```shell
 javac Increment.java
