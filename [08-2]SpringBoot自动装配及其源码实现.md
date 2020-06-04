@@ -214,7 +214,6 @@ spring:
      - 那么他是怎么得到的呢？`SpringFactoriesLoader.loadFactoryNames`
        通过这个方法扫描所有jar包类路径下 `META-INF/spring.factories`
        - 可以看图
-         ![](images/08-2/factory位置.png)
          ![](images/08-2/拿到127个自动配置.png)
          ![](images/08-2/拿到的顺序与个数与配置中一致.png)
      - 其作用:
@@ -338,7 +337,7 @@ public class ServerProperties {
 
 所以我们就可以在properties中，依次对我们想要设置的配置bean设值，自动配置类就可以通过上文的代码和注解，读取到我们的配置，然后生成相应的bean注册到ioc容器中由spring框架或业务方使用。
 
-![properties配置](images/08-2/properties配置.png)
+![](images/08-2/properties配置.png)
 
 
 
@@ -347,3 +346,65 @@ public class ServerProperties {
 #### ii. 小结
 
 一旦这个自动配置类生效，这个配置类就会给容器中中添加组件`@Bean`，这些组件的属性是从相应的Properties类`上文案例中的Encoding`中获取的，而这些类的属性又和配置文件`application.properties`中的自定义值绑定。
+
+## 3. 自动配置的注解条件判断
+
+在上述的自动配置过程中，配置类中的方法会将生成的配置类以@Bean的注解形式返回，并注册到ioc容器中，而在这个注解下还有@ConditionalOnMissingBean这个注解，他作为一个条件判断，判断容器中没有这个bean的时候，才想容器中注册Bean。
+
+```java
+	@Bean
+	@ConditionalOnMissingBean
+	public CharacterEncodingFilter characterEncodingFilter() {
+```
+
+### （1）条件判断 @ConditionalOnMissingBean
+
+这个注解是实现自spring的原生注解
+
+`@Conditional(OnBeanCondition.class)`
+
+进入OnBeanCondition.class，可以很清晰的看到，spring为我们的条件判断返回了一个包装类：ConditionOutcome
+
+```Java
+protected final ConditionOutcome[] getOutcomes(String[] autoConfigurationClasses,
+```
+
+仔细看这个包装类，他的就是返回了这个判断的boolean值，以及相应的log信息
+
+```Java
+/**
+ * Outcome for a condition match, including log message.
+ *
+ * @author Phillip Webb
+ * @since 1.0.0
+ * @see ConditionMessage
+ */
+public class ConditionOutcome {
+   private final boolean match;
+   private final ConditionMessage message;
+  ....
+```
+
+以Condition实现了配置条件的判断。
+
+### （2）更多判断注解
+
+![](/images/08-2/conditional派生的注解.png)
+
+springboot也为我们提供更多的从conditional派生出来的注解。
+
+比如
+
+@ConditionalOnJava: 判断系统的版本是否符合要求
+
+@ConditionalOnClass: 判断系统中有指定的类
+
+等等。
+
+所以，我们的spring-boot-autoconfigure，虽然从META-INF/spring.factories中拿到了127个自动配置类，但并不是每一个都生效的。原因就在于这个配置之前的判断。
+
+在IDEA中，还可以点进去某一个配置类中，查看相应判断注释`@ConditionalOnClass(xxx.class)`中的参数类名是否有效，就可以判断这个自动配置是否在这个应用起作用：
+
+![选中配置类](/images/08-2/选中配置类.png)
+
+![](/images/08-2/观察配置类.png)
