@@ -24,7 +24,7 @@
 
 
 # Redis
-
+[Redis高级数据结构HyperLogLog原理详解和应用场景](https://blog.csdn.net/William0318/article/details/89362255)
 [详细解析Redis中的布隆过滤器及其应用](https://www.cnblogs.com/heihaozi/p/12174478.html)
 
 
@@ -58,3 +58,16 @@ Redis主动删除失效key的策略是：随机抽取一部分的key进行校验
 如果过期的key超过25%，重新执行步骤1
 
 [Redis内存回收策略和key失效机制](https://zhuanlan.zhihu.com/p/149528273)
+
+
+[Redis分布式锁](https://zhuanlan.zhihu.com/p/130235036)
+[Springboot分别使用乐观锁和分布式锁（基于redisson）完成高并发防超卖](https://blog.csdn.net/tianyaleixiaowu/article/details/90036180?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-8.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-8.nonecase)
+
+# 大量数据相关问题
+[10亿个数选取重复次数最多的100个整数](https://blog.csdn.net/iteye_7408/article/details/82209473)
+[在100G文件中找出出现次数最多的100个IP](https://blog.csdn.net/fycy2010/article/details/46945641?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.nonecase)
+
+
+# Linux
+linux查看服务端口号
+netstat -atunp | grep mysql
