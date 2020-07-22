@@ -62,6 +62,7 @@ Redis主动删除失效key的策略是：随机抽取一部分的key进行校验
 
 [Redis分布式锁](https://zhuanlan.zhihu.com/p/130235036)
 [Springboot分别使用乐观锁和分布式锁（基于redisson）完成高并发防超卖](https://blog.csdn.net/tianyaleixiaowu/article/details/90036180?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-8.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-8.nonecase)
+[](https://www.cnblogs.com/hujunzheng/p/11295345.html)
 
 # 大量数据相关问题
 [10亿个数选取重复次数最多的100个整数](https://blog.csdn.net/iteye_7408/article/details/82209473)
