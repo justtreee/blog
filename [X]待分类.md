@@ -72,3 +72,8 @@ Redis主动删除失效key的策略是：随机抽取一部分的key进行校验
 # Linux
 linux查看服务端口号
 netstat -atunp | grep mysql
+[linux 磁盘空间满了，排查记录](https://blog.csdn.net/zhouminit/article/details/97246849)
+
+
+# Spring
+[Spring常见面试题总结（超详细回答）](https://blog.csdn.net/a745233700/article/details/80959716)
